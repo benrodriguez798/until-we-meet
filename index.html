@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1030">
 <title>Until We See Each Other Again</title>
 <style>
   :root{
@@ -10,7 +11,7 @@
     --gold:#ffd27a;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;overflow:hidden}
+  html,body{height:100%;height:100dvh;overflow:hidden}
   body{
     font-family:"Georgia","Times New Roman",serif;
     color:var(--ink);
@@ -88,6 +89,36 @@
   @keyframes shoot{0%{transform:translate(0,0);opacity:0}2%{opacity:1}12%{transform:translate(-320px,170px);opacity:0}100%{transform:translate(-320px,170px);opacity:0}}
   .wave{animation:wave 3s ease-in-out infinite;transform-box:fill-box;transform-origin:0 50%}
   @keyframes wave{0%,100%{transform:skewY(0)}50%{transform:skewY(6deg)}}
+
+  /* ---------- Phone (portrait): camera slowly pans Chile <-> China ---------- */
+  @keyframes pan{
+    0%,8%{transform:translateX(0)}
+    22%,30%{transform:translateX(-500px)}
+    44%,56%{transform:translateX(-1000px)}
+    70%,78%{transform:translateX(-500px)}
+    92%,100%{transform:translateX(0)}
+  }
+  @media (max-aspect-ratio:1/1){
+    .content{padding-top:max(5vh,env(safe-area-inset-top))}
+    h1{font-size:clamp(1.7rem,8.4vw,2.6rem);line-height:1.15;max-width:92vw}
+    .timer{width:100%;max-width:440px;gap:2.2vw;flex-wrap:nowrap}
+    .box{flex:1;min-width:0;padding:.7rem .2rem;border-radius:14px}
+    .num{font-size:clamp(1.7rem,9.5vw,3rem)}
+    .lab{letter-spacing:.12em;font-size:.58rem}
+    .target{padding:0 4vw;line-height:1.4}
+    #scene{height:auto;aspect-ratio:1/1;padding-bottom:env(safe-area-inset-bottom)}
+    #pan{animation:pan 48s ease-in-out infinite}
+  }
+  /* Phone held sideways */
+  @media (max-height:520px) and (min-aspect-ratio:1/1){
+    .content{padding-top:2vh}
+    h1{font-size:1.4rem}
+    .sub,.target{display:none}
+    .timer{margin-top:.6rem}
+    .box{padding:.35rem .5rem;min-width:70px}
+    .num{font-size:2rem}
+    #scene{height:50vh}
+  }
 </style>
 </head>
 <body>
@@ -120,6 +151,7 @@
     <radialGradient id="sun"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#ffb35a"/></radialGradient>
   </defs>
 
+  <g id="pan">
   <!-- setting sun in the middle -->
   <circle class="glow" cx="800" cy="470" r="170" fill="url(#glow)"/>
   <circle cx="800" cy="470" r="62" fill="url(#sun)"/>
@@ -330,6 +362,7 @@
     <g class="lantern" style="animation-delay:-8s"><ellipse cx="900" cy="575" rx="10" ry="13" fill="#ff4a6a"/><rect x="895" y="567" width="10" height="3" fill="#ffd27a"/></g>
     <g class="lantern" style="animation-delay:-11s"><ellipse cx="1390" cy="570" rx="10" ry="13" fill="#ff5a4a"/><rect x="1385" y="562" width="10" height="3" fill="#ffd27a"/></g>
   </g>
+</g>
 </svg>
 
 <script>
@@ -348,6 +381,15 @@
     el.s.textContent = pad(t % 60);
   }
   tick(); setInterval(tick, 250);
+
+  // phone portrait: show a 600-wide window of the scene (CSS pans it)
+  var scene = document.getElementById("scene"), mq = window.matchMedia("(max-aspect-ratio: 1/1)");
+  function fit(){
+    scene.setAttribute("viewBox", mq.matches ? "0 0 600 600" : "0 0 1600 600");
+    scene.setAttribute("preserveAspectRatio", mq.matches ? "xMidYMax meet" : "xMidYMax slice");
+  }
+  fit();
+  if (mq.addEventListener) mq.addEventListener("change", fit); else mq.addListener(fit);
 
   // shooting star
   var sh = document.createElementNS("http://www.w3.org/2000/svg", "line");
