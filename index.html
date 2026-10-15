@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Until We See Each Other Again</title>
+<style>
+  :root{
+    --ink:#fff7e8;
+    --gold:#ffd27a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:"Georgia","Times New Roman",serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,#0b1030 0%,#2a2a6b 38%,#8a4a7a 66%,#f08a5d 100%);
+  }
+  #stars{position:absolute;inset:0;width:100%;height:100%}
+  .star{animation:tw 3s ease-in-out infinite}
+  @keyframes tw{0%,100%{opacity:.2}50%{opacity:1}}
+
+  .content{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;
+    padding:6vh 16px 0;text-align:center;z-index:2;
+  }
+  h1{
+    font-weight:400;font-style:italic;
+    font-size:clamp(1.6rem,4.6vw,3.4rem);
+    letter-spacing:.02em;
+    text-shadow:0 2px 24px rgba(255,200,120,.45);
+  }
+  .sub{
+    margin-top:.6rem;font-size:clamp(.7rem,1.5vw,.95rem);
+    letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.9;
+  }
+  .timer{
+    margin-top:clamp(1rem,4vh,2.2rem);
+    display:flex;gap:clamp(.5rem,2vw,1.4rem);flex-wrap:wrap;justify-content:center;
+  }
+  .box{
+    min-width:clamp(68px,13vw,140px);
+    padding:clamp(.6rem,2vh,1.1rem) .6rem;
+    background:rgba(10,12,40,.45);
+    border:1px solid rgba(255,210,122,.4);
+    border-radius:18px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 8px 30px rgba(0,0,0,.35);
+  }
+  .num{
+    font-family:"Segoe UI",system-ui,sans-serif;font-weight:200;
+    font-size:clamp(2rem,7vw,4.8rem);line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .lab{
+    margin-top:.4rem;font-family:"Segoe UI",system-ui,sans-serif;
+    font-size:clamp(.6rem,1.2vw,.8rem);letter-spacing:.25em;text-transform:uppercase;color:var(--gold);
+  }
+  .target{
+    margin-top:1.1rem;font-family:"Segoe UI",system-ui,sans-serif;
+    font-size:clamp(.7rem,1.4vw,.9rem);opacity:.75;letter-spacing:.05em;
+  }
+
+  #scene{position:absolute;left:0;bottom:0;width:100%;height:58vh;z-index:1}
+  .sway{transform-box:fill-box;transform-origin:50% 100%;animation:sway 4s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  .twinkle{animation:win 2.5s steps(1) infinite}
+  @keyframes win{0%{opacity:1}40%{opacity:.25}60%{opacity:1}}
+  .bob{animation:bob 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .chew{animation:chew .7s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+  @keyframes chew{0%,100%{transform:rotate(0)}50%{transform:rotate(-6deg)}}
+  .drift{animation:drift 60s linear infinite}
+  @keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(1800px)}}
+  .lantern{animation:rise 14s linear infinite;opacity:0}
+  @keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:.95}85%{opacity:.9}100%{transform:translateY(-420px);opacity:0}}
+  .pulse{animation:pulse 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes pulse{0%,40%,100%{transform:scale(1)}10%{transform:scale(1.35)}20%{transform:scale(1)}28%{transform:scale(1.25)}}
+  .pulse{animation-duration:1.4s}
+  .eat{animation:eat 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+  @keyframes eat{0%,100%{transform:translate(0,0) rotate(0)}40%,65%{transform:translate(26px,-12px) rotate(10deg)}}
+  .mini{animation:mini 4.5s ease-out infinite;opacity:0}
+  @keyframes mini{0%{transform:translate(0,0) scale(.4);opacity:0}15%{opacity:.9}100%{transform:translate(var(--dx),-90px) scale(1);opacity:0}}
+  .glow{animation:glow 4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes glow{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.12);opacity:1}}
+  .shoot{animation:shoot 9s linear infinite;opacity:0}
+  @keyframes shoot{0%{transform:translate(0,0);opacity:0}2%{opacity:1}12%{transform:translate(-320px,170px);opacity:0}100%{transform:translate(-320px,170px);opacity:0}}
+  .wave{animation:wave 3s ease-in-out infinite;transform-box:fill-box;transform-origin:0 50%}
+  @keyframes wave{0%,100%{transform:skewY(0)}50%{transform:skewY(6deg)}}
+</style>
+</head>
+<body>
+<svg id="stars" aria-hidden="true"></svg>
+
+<div class="content">
+  <h1>Until we see each other again</h1>
+  <div class="sub">Chile &nbsp;·&nbsp; China</div>
+  <div class="timer" role="timer" aria-live="off">
+    <div class="box"><div class="num" id="d">--</div><div class="lab">Days</div></div>
+    <div class="box"><div class="num" id="h">--</div><div class="lab">Hours</div></div>
+    <div class="box"><div class="num" id="m">--</div><div class="lab">Minutes</div></div>
+    <div class="box"><div class="num" id="s">--</div><div class="lab">Seconds</div></div>
+  </div>
+  <div class="target">Friday, January 22, 2027 · 4:25 PM China time</div>
+</div>
+
+<svg id="scene" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="mtn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5b4a8c"/><stop offset="1" stop-color="#2c2559"/>
+    </linearGradient>
+    <linearGradient id="mtn2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a5a9a"/><stop offset="1" stop-color="#3b2f6b"/>
+    </linearGradient>
+    <linearGradient id="city" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2a6a"/><stop offset="1" stop-color="#1a1440"/>
+    </linearGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#ffe3a0" stop-opacity=".9"/><stop offset="1" stop-color="#ffe3a0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="sun"><stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#ffb35a"/></radialGradient>
+  </defs>
+
+  <!-- setting sun in the middle -->
+  <circle class="glow" cx="800" cy="470" r="170" fill="url(#glow)"/>
+  <circle cx="800" cy="470" r="62" fill="url(#sun)"/>
+
+  <!-- drifting clouds -->
+  <g class="drift" opacity=".35" fill="#ffd9c0">
+    <ellipse cx="0" cy="120" rx="90" ry="16"/><ellipse cx="40" cy="108" rx="50" ry="14"/>
+  </g>
+  <g class="drift" style="animation-duration:90s;animation-delay:-40s" opacity=".25" fill="#ffd9c0">
+    <ellipse cx="0" cy="210" rx="120" ry="18"/><ellipse cx="50" cy="198" rx="60" ry="14"/>
+  </g>
+
+  <!-- flight path: Chile -> China -->
+  <path id="route" d="M 330 330 Q 800 40 1270 330" fill="none" stroke="#ffd27a" stroke-width="2" stroke-dasharray="4 10" opacity=".7"/>
+  <g>
+    <path d="M-14 0 L14 0 L6 -4 L-4 -4 Z" fill="#fff"/>
+    <path d="M-4 0 L-14 10 L-8 10 L4 0Z M-4 0 L-14 -10 L-8 -10 L4 0Z" fill="#fff" opacity=".9"/>
+    <animateMotion dur="14s" repeatCount="indefinite" rotate="auto"><mpath href="#route"/></animateMotion>
+    <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="0;1;1;0" keyTimes="0;.06;.94;1"/>
+  </g>
+  <!-- pulsing heart at the apex -->
+  <g transform="translate(0,-30)"><path class="pulse" d="M800 150 C 780 125, 750 150, 800 190 C 850 150, 820 125, 800 150Z" fill="#ff6b81"/></g>
+
+  <g fill="#ff6b81">
+    <path class="mini" style="--dx:-30px;animation-delay:0s" d="M800 120 c-6 -8 -16 0 0 14 c16 -14 6 -22 0 -14z"/>
+    <path class="mini" style="--dx:25px;animation-delay:-1.5s" d="M800 120 c-6 -8 -16 0 0 14 c16 -14 6 -22 0 -14z"/>
+    <path class="mini" style="--dx:0px;animation-delay:-3s" d="M800 120 c-6 -8 -16 0 0 14 c16 -14 6 -22 0 -14z"/>
+  </g>
+
+  <!-- ================= CHILE (left) ================= -->
+  <!-- far Andes -->
+  <polygon points="0,420 90,300 160,360 260,230 350,340 430,280 520,380 620,300 720,400 800,430 800,600 0,600" fill="url(#mtn)"/>
+  <g fill="#fff" opacity=".95">
+    <polygon points="260,230 206,300 225,285 240,306 258,288 275,309 292,290 317,300"/>
+    <polygon points="90,300 56,345 72,332 88,350 104,334 122,348 142,345"/>
+    <polygon points="430,280 350,340 375,325 392,346 410,326 428,351 448,328 468,346 484,340"/>
+    <polygon points="620,300 558,350 578,338 594,357 610,340 626,359 644,340 660,352 670,350"/>
+  </g>
+  <g fill="#e9e4ff" opacity=".55">
+    <polygon points="260,230 280,262 262,282 275,309 292,290 317,300 300,270"/>
+    <polygon points="430,280 448,328 468,346 484,340 462,306"/>
+    <polygon points="620,300 640,335 660,352 670,350 646,318"/>
+  </g>
+  <!-- Patagonia lake -->
+  <path d="M0 520 Q 200 505 420 520 T 800 520 L800 600 L0 600Z" fill="#2c3f7a" opacity=".85"/>
+  <path d="M60 545 h110 M240 560 h140 M450 548 h120" stroke="#ffd9a0" stroke-width="2" opacity=".5" stroke-linecap="round"/>
+  <!-- foreground hill -->
+  <path d="M0 560 Q 160 500 340 545 T 700 550 L800 560 L800 600 L0 600Z" fill="#1d1a3f"/>
+
+  <!-- Easter Island moai on an ahu platform -->
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3a3160"/><stop offset=".6" stop-color="#6c5b92"/><stop offset="1" stop-color="#9a80b0"/>
+    </linearGradient>
+    <g id="moai">
+      <!-- torso -->
+      <path d="M-21 0 L-23 -46 Q-23 -54 -14 -54 L14 -54 Q23 -54 23 -46 L21 0Z" fill="url(#stone)"/>
+      <!-- arms and hands -->
+      <path d="M-23 -44 Q-24 -24 -10 -16 M23 -44 Q24 -24 10 -16" stroke="#1f1840" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M-11 -17 L11 -17 M-9 -13 L9 -13" stroke="#1f1840" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-10 -17 l3 -5 M-4 -17 l1 -6 M4 -17 l-1 -6 M10 -17 l-3 -5" stroke="#1f1840" stroke-width="1.4" stroke-linecap="round"/>
+      <!-- ears -->
+      <rect x="-27" y="-108" width="7" height="34" rx="3" fill="url(#stone)"/>
+      <rect x="20" y="-108" width="7" height="34" rx="3" fill="url(#stone)"/>
+      <!-- head -->
+      <path d="M-19 -52 L-21 -118 Q-21 -134 -9 -134 L9 -134 Q21 -134 21 -118 L19 -52 Q10 -46 0 -46 Q-10 -46 -19 -52Z" fill="url(#stone)"/>
+      <!-- heavy brow and eye sockets -->
+      <path d="M-21 -108 Q0 -116 21 -108 L21 -101 Q0 -108 -21 -101Z" fill="#1f1840" opacity=".75"/>
+      <ellipse cx="-10" cy="-99" rx="5" ry="3.5" fill="#150f35"/><ellipse cx="10" cy="-99" rx="5" ry="3.5" fill="#150f35"/>
+      <!-- long nose -->
+      <path d="M-4 -106 L-5 -76 Q0 -70 5 -76 L4 -106Z" fill="#8d79b3" opacity=".85"/>
+      <path d="M-5 -76 Q0 -70 5 -76" stroke="#1f1840" stroke-width="2" fill="none"/>
+      <path d="M-3 -79 l0 3 M3 -79 l0 3" stroke="#150f35" stroke-width="1.6"/>
+      <!-- thin lips and strong chin -->
+      <path d="M-11 -64 Q0 -60 11 -64" stroke="#150f35" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <path d="M-12 -57 Q0 -52 12 -57" stroke="#1f1840" stroke-width="1.6" fill="none" opacity=".7"/>
+      <!-- cheek shadows -->
+      <path d="M-18 -94 Q-13 -74 -11 -66 M18 -94 Q13 -74 11 -66" stroke="#1f1840" stroke-width="1.5" fill="none" opacity=".5"/>
+    </g>
+  </defs>
+  <!-- ahu stone platform -->
+  <g>
+    <path d="M30 592 L50 556 L350 556 L370 592Z" fill="#2a2352"/>
+    <g stroke="#1a1440" stroke-width="2" fill="none">
+      <path d="M44 568 H356 M38 580 H362"/>
+      <path d="M90 556 v12 M160 556 v12 M230 556 v12 M300 556 v12 M65 568 v12 M125 568 v12 M195 568 v12 M265 568 v12 M335 568 v12 M95 580 v12 M165 580 v12 M235 580 v12 M305 580 v12"/>
+    </g>
+  </g>
+  <use href="#moai" transform="translate(105,558) scale(1.05)"/>
+  <use href="#moai" transform="translate(205,558) scale(1.2)"/>
+  <use href="#moai" transform="translate(300,558) scale(.95)"/>
+  <!-- grass tufts -->
+  <g stroke="#4f8f64" stroke-width="2" stroke-linecap="round">
+    <path d="M20 575 l-3 -12 M24 575 l2 -14 M28 575 l5 -10 M372 580 l-3 -12 M377 580 l2 -14 M382 580 l5 -10"/>
+  </g>
+  <!-- Chilean flag -->
+  <rect x="660" y="450" width="3" height="110" fill="#cfc7ee"/>
+  <g class="wave">
+    <rect x="663" y="452" width="62" height="20" fill="#fff"/>
+    <rect x="663" y="472" width="62" height="20" fill="#d52b1e"/>
+    <rect x="663" y="452" width="22" height="20" fill="#0039a6"/>
+    <polygon points="674,455 676,462 683,462 677,466 679,471 674,467 669,471 671,466 665,462 672,462" fill="#fff" transform="scale(.9) translate(75,50)"/>
+  </g>
+  <!-- condor -->
+  <g class="drift" style="animation-duration:38s;animation-delay:-8s">
+    <g transform="translate(0,260)">
+      <path d="M-26 4 Q-13 -14 0 0 Q13 -14 26 4 Q13 -4 0 6 Q-13 -4 -26 4Z" fill="#150f35">
+        <animate attributeName="d" dur="1.8s" repeatCount="indefinite"
+          values="M-26 4 Q-13 -14 0 0 Q13 -14 26 4 Q13 -4 0 6 Q-13 -4 -26 4Z;M-26 -6 Q-13 6 0 2 Q13 6 26 -6 Q13 8 0 8 Q-13 8 -26 -6Z;M-26 4 Q-13 -14 0 0 Q13 -14 26 4 Q13 -4 0 6 Q-13 -4 -26 4Z"/>
+      </path>
+    </g>
+  </g>
+
+  <!-- ================= CHINA (right) ================= -->
+  <!-- far hills / karst -->
+  <path d="M800 430 Q 880 380 940 410 Q 1000 330 1070 400 Q 1130 360 1200 410 Q 1260 350 1340 400 Q 1450 340 1600 420 L1600 600 L800 600Z" fill="url(#mtn)" opacity=".8"/>
+  <!-- skyline -->
+  <g fill="url(#city)">
+    <rect x="860" y="400" width="42" height="200"/><rect x="910" y="370" width="36" height="230"/>
+    <rect x="1000" y="410" width="50" height="190"/><rect x="1180" y="380" width="44" height="220"/>
+    <rect x="1240" y="420" width="55" height="180"/><rect x="1330" y="390" width="40" height="210"/>
+    <rect x="1440" y="410" width="60" height="190"/><rect x="1520" y="380" width="50" height="220"/>
+  </g>
+  <!-- Shanghai Tower (twisting) -->
+  <path d="M1060 600 L1070 330 Q1085 250 1095 175 Q1105 250 1118 330 L1130 600Z" fill="#4a3a86"/>
+  <path d="M1095 175 L1095 130" stroke="#cfc7ee" stroke-width="3"/>
+  <path d="M1070 330 Q1090 300 1118 330 M1076 420 Q1096 395 1124 420 M1062 520 Q1088 495 1130 520" stroke="#ffd27a" stroke-width="2" fill="none" opacity=".7"/>
+  <!-- Oriental Pearl Tower -->
+  <g>
+    <polygon points="1230,600 1244,330 1252,330 1266,600" fill="#3a2a6a"/>
+    <polygon points="1214,600 1236,380 1242,380 1230,600" fill="#2c2159"/>
+    <polygon points="1266,600 1254,380 1260,380 1284,600" fill="#2c2159"/>
+    <rect x="1245" y="226" width="6" height="230" fill="#3a2a6a"/>
+    <circle cx="1248" cy="450" r="22" fill="#ff7aa8"/>
+    <circle cx="1248" cy="300" r="34" fill="#ff7aa8"/>
+    <circle cx="1240" cy="292" r="10" fill="#ffc4d8" opacity=".7"/>
+    <circle cx="1248" cy="226" r="15" fill="#ff7aa8"/>
+    <rect x="1246" y="140" width="4" height="88" fill="#cfc7ee"/>
+    <circle class="twinkle" cx="1248" cy="140" r="4" fill="#ff4d4d"/>
+  </g>
+  <!-- windows -->
+  <g fill="#ffd27a">
+    <rect class="twinkle" x="870" y="420" width="5" height="7"/><rect class="twinkle" style="animation-delay:.6s" x="885" y="450" width="5" height="7"/>
+    <rect class="twinkle" style="animation-delay:1.1s" x="920" y="400" width="5" height="7"/><rect class="twinkle" style="animation-delay:.3s" x="930" y="450" width="5" height="7"/>
+    <rect class="twinkle" style="animation-delay:1.6s" x="1015" y="440" width="5" height="7"/><rect class="twinkle" x="1030" y="480" width="5" height="7"/>
+    <rect class="twinkle" style="animation-delay:.9s" x="1190" y="410" width="5" height="7"/><rect class="twinkle" style="animation-delay:.2s" x="1205" y="460" width="5" height="7"/>
+    <rect class="twinkle" style="animation-delay:1.3s" x="1340" y="420" width="5" height="7"/><rect class="twinkle" x="1352" y="470" width="5" height="7"/>
+    <rect class="twinkle" style="animation-delay:.7s" x="1455" y="440" width="5" height="7"/><rect class="twinkle" style="animation-delay:1.9s" x="1535" y="410" width="5" height="7"/>
+  </g>
+  <!-- river reflection -->
+  <path d="M800 540 Q 1000 525 1200 540 T 1600 540 L1600 600 L800 600Z" fill="#2c3f7a" opacity=".75"/>
+  <path d="M900 565 h120 M1120 575 h160 M1360 562 h110" stroke="#ffd9a0" stroke-width="2" opacity=".45" stroke-linecap="round"/>
+  <path d="M800 575 Q 1000 540 1200 570 T 1600 565 L1600 600 L800 600Z" fill="#1d1a3f"/>
+
+  <!-- Chinese flag -->
+  <defs><polygon id="st" points="0,-1 .2245,-.309 .951,-.309 .363,.118 .588,.809 0,.382 -.588,.809 -.363,.118 -.951,-.309 -.2245,-.309"/></defs>
+  <rect x="940" y="450" width="3" height="110" fill="#cfc7ee"/>
+  <g class="wave">
+    <rect x="943" y="452" width="62" height="41" fill="#de2910"/>
+    <use href="#st" transform="translate(957,466) scale(8)" fill="#ffde00"/>
+    <use href="#st" transform="translate(972,457) scale(2.6) rotate(20)" fill="#ffde00"/>
+    <use href="#st" transform="translate(977,464) scale(2.6) rotate(45)" fill="#ffde00"/>
+    <use href="#st" transform="translate(977,472) scale(2.6) rotate(20)" fill="#ffde00"/>
+    <use href="#st" transform="translate(972,479) scale(2.6) rotate(5)" fill="#ffde00"/>
+  </g>
+  <!-- bamboo -->
+  <g stroke="#6fbf73" stroke-width="7" stroke-linecap="round">
+    <g class="sway"><line x1="1420" y1="590" x2="1420" y2="400"/><path d="M1420 440 q30 -10 48 -34 M1420 480 q-30 -8 -46 -30" stroke-width="5" fill="none"/></g>
+    <g class="sway" style="animation-delay:-1.2s"><line x1="1460" y1="590" x2="1460" y2="360"/><path d="M1460 400 q30 -10 50 -36 M1460 450 q-28 -6 -44 -28" stroke-width="5" fill="none"/></g>
+    <g class="sway" style="animation-delay:-2.4s"><line x1="1500" y1="590" x2="1500" y2="430"/><path d="M1500 470 q28 -8 44 -30" stroke-width="5" fill="none"/></g>
+  </g>
+  <g stroke="#3d8f4d" stroke-width="2">
+    <line x1="1412" y1="470" x2="1428" y2="470"/><line x1="1412" y1="530" x2="1428" y2="530"/>
+    <line x1="1452" y1="440" x2="1468" y2="440"/><line x1="1452" y1="510" x2="1468" y2="510"/>
+  </g>
+
+  <!-- Panda (Chongqing / Sichuan) -->
+  <g transform="translate(1300,0)"><g class="bob">
+    <!-- legs -->
+    <ellipse cx="0" cy="570" rx="26" ry="16" fill="#151126"/><ellipse cx="86" cy="570" rx="26" ry="16" fill="#151126"/>
+    <!-- body -->
+    <ellipse cx="43" cy="525" rx="62" ry="50" fill="#fdfbf5"/>
+    <ellipse cx="43" cy="505" rx="62" ry="22" fill="#151126" opacity=".0"/>
+    <path d="M-12 520 Q 43 490 98 520 Q 100 500 43 485 Q -14 500 -12 520Z" fill="#151126"/>
+    <!-- head -->
+    <g class="chew">
+      <circle cx="43" cy="452" r="38" fill="#fdfbf5"/>
+      <circle cx="12" cy="422" r="14" fill="#151126"/><circle cx="74" cy="422" r="14" fill="#151126"/>
+      <ellipse cx="28" cy="450" rx="10" ry="13" fill="#151126" transform="rotate(20 28 450)"/>
+      <ellipse cx="58" cy="450" rx="10" ry="13" fill="#151126" transform="rotate(-20 58 450)"/>
+      <circle cx="29" cy="449" r="3.2" fill="#fff"/><circle cx="57" cy="449" r="3.2" fill="#fff"/>
+      <ellipse cx="43" cy="466" rx="8" ry="5.5" fill="#151126"/>
+      <path d="M36 474 Q43 481 50 474" stroke="#151126" stroke-width="2" fill="none"/>
+    </g>
+    <!-- arm holding bamboo -->
+    <g class="eat">
+      <line x1="46" y1="548" x2="14" y2="478" stroke="#6fbf73" stroke-width="9" stroke-linecap="round"/>
+      <line x1="36" y1="526" x2="26" y2="504" stroke="#3d8f4d" stroke-width="2"/>
+      <path d="M14 478 q-10 -10 -22 -8 M14 480 q6 -14 18 -16" stroke="#6fbf73" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <ellipse cx="30" cy="508" rx="13" ry="20" fill="#151126" transform="rotate(25 30 508)"/>
+    </g>
+  </g></g>
+
+  <!-- floating lanterns -->
+  <g>
+    <g class="lantern" style="animation-delay:0s"><ellipse cx="1000" cy="560" rx="11" ry="14" fill="#ff5a4a"/><rect x="994" y="552" width="12" height="3" fill="#ffd27a"/></g>
+    <g class="lantern" style="animation-delay:-4s"><ellipse cx="1180" cy="570" rx="9" ry="12" fill="#ff7a4a"/><rect x="1175" y="563" width="10" height="3" fill="#ffd27a"/></g>
+    <g class="lantern" style="animation-delay:-8s"><ellipse cx="900" cy="575" rx="10" ry="13" fill="#ff4a6a"/><rect x="895" y="567" width="10" height="3" fill="#ffd27a"/></g>
+    <g class="lantern" style="animation-delay:-11s"><ellipse cx="1390" cy="570" rx="10" ry="13" fill="#ff5a4a"/><rect x="1385" y="562" width="10" height="3" fill="#ffd27a"/></g>
+  </g>
+</svg>
+
+<script>
+(function(){
+  // Target: Jan 22, 2027 4:25 PM China (UTC+8) = 08:25:00 UTC = 5:25 AM Chile (UTC-3)
+  var TARGET = Date.UTC(2027, 0, 22, 8, 25, 0);
+
+  var el = {d:d, h:h, m:m, s:s};
+  function pad(n){ return String(n).padStart(2, "0"); }
+  function tick(){
+    var diff = Math.max(0, TARGET - Date.now());
+    var t = Math.floor(diff / 1000);
+    el.d.textContent = Math.floor(t / 86400);
+    el.h.textContent = pad(Math.floor(t % 86400 / 3600));
+    el.m.textContent = pad(Math.floor(t % 3600 / 60));
+    el.s.textContent = pad(t % 60);
+  }
+  tick(); setInterval(tick, 250);
+
+  // shooting star
+  var sh = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  sh.setAttribute("x1","85%"); sh.setAttribute("y1","8%"); sh.setAttribute("x2","86.5%"); sh.setAttribute("y2","9%");
+  sh.setAttribute("stroke","#fff"); sh.setAttribute("stroke-width","2"); sh.setAttribute("stroke-linecap","round");
+  sh.setAttribute("class","shoot"); document.getElementById("stars").appendChild(sh);
+  // stars
+  var svg = document.getElementById("stars"), NS = "http://www.w3.org/2000/svg";
+  for (var i = 0; i < 90; i++){
+    var c = document.createElementNS(NS, "circle");
+    c.setAttribute("cx", (Math.random()*100) + "%");
+    c.setAttribute("cy", (Math.random()*55) + "%");
+    c.setAttribute("r", (Math.random()*1.4 + .4).toFixed(2));
+    c.setAttribute("fill", "#fff");
+    c.setAttribute("class", "star");
+    c.style.animationDelay = (-Math.random()*3).toFixed(2) + "s";
+    c.style.animationDuration = (2 + Math.random()*3).toFixed(2) + "s";
+    svg.appendChild(c);
+  }
+})();
+</script>
+</body>
+</html>
