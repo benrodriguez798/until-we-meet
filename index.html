@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b1030">
+<meta name="color-scheme" content="dark">
 <title>Until We See Each Other Again</title>
 <style>
   :root{
@@ -94,9 +95,10 @@
   #extra{display:none}
   h1 br{display:none}
   @media (max-aspect-ratio:1/1){
-    html{background:linear-gradient(#0b1030 55%,#1d1a3f 55%)}
+    html{background-color:#0b1030;background-image:linear-gradient(#0b1030 55%,#1d1a3f 55%)}
+    body::before{content:"";position:fixed;left:0;right:0;top:0;height:24px;background:#0b1030;z-index:5;pointer-events:none}
     body{overscroll-behavior:none}
-    body::after{content:"";position:fixed;left:0;right:0;bottom:-200px;height:200px;background:#1d1a3f;z-index:1}
+    body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:24px;background:#1d1a3f;z-index:1;pointer-events:none}
     .content{bottom:auto;height:calc(100vh - 111.5vw);height:calc(100dvh - 111.5vw);justify-content:flex-end;padding-top:env(safe-area-inset-top);padding-bottom:3vh}
     h1{font-size:min(9.8vw,5.6vh,3.4rem);line-height:1.08;max-width:96vw}
     h1 br{display:inline}
@@ -140,7 +142,7 @@
 
 <div class="content">
   <h1>Until we see each <br>other again</h1>
-  <div class="sub">Te amo, baobao</div>
+  <div class="sub">Te amo baobao</div>
   <div class="timer" role="timer" aria-live="off">
     <div class="box"><div class="num" id="d">--</div><div class="lab">Days</div></div>
     <div class="box"><div class="num" id="h">--</div><div class="lab">Hours</div></div>
