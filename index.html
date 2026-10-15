@@ -94,26 +94,26 @@
   #extra{display:none}
   h1 br{display:none}
   @media (max-aspect-ratio:1/1){
-    html{background:#0b1030}
+    html{background:linear-gradient(#0b1030 55%,#1d1a3f 55%)}
     body{overscroll-behavior:none}
     body::after{content:"";position:fixed;left:0;right:0;bottom:-200px;height:200px;background:#1d1a3f;z-index:1}
-    .content{bottom:auto;height:calc(100vh - min(115.4vw,58vh));height:calc(100dvh - min(115.4vw,58dvh));justify-content:flex-end;padding-top:env(safe-area-inset-top);padding-bottom:3vh}
-    h1{font-size:clamp(1.9rem,9.8vw,3.4rem);line-height:1.08;max-width:96vw}
+    .content{bottom:auto;height:calc(100vh - 111.5vw);height:calc(100dvh - 111.5vw);justify-content:flex-end;padding-top:env(safe-area-inset-top);padding-bottom:3vh}
+    h1{font-size:min(9.8vw,5.6vh,3.4rem);line-height:1.08;max-width:96vw}
     h1 br{display:inline}
     .sub{margin-top:.8rem}
     .timer{width:100%;max-width:440px;gap:2.2vw;flex-wrap:nowrap;margin-top:clamp(.8rem,2.5vh,1.6rem)}
     .box{flex:1;min-width:0;padding:.7rem .2rem;border-radius:14px}
-    .num{font-size:clamp(1.7rem,9.5vw,3rem)}
+    .num{font-size:min(9.5vw,5.2vh,3rem)}
     .lab{letter-spacing:.12em;font-size:.58rem}
     .target{padding:0 4vw;line-height:1.4;margin-top:.8rem}
-    #scene{height:min(115.4vw,58vh);height:min(115.4vw,58dvh)}
+    #scene{width:100%;height:auto;aspect-ratio:780/870}
     #route{stroke-width:3.5px;stroke-dasharray:9 14;opacity:.9}
     #plane{scale:1.9}
     #heartg{transform:translate(390px,-120px) scale(2.4) translate(-800px,-142px)}
     #extra{display:block}
     #sky{transform:translateX(-410px)}
     #chile{clip-path:url(#clipL)}
-    #cflag{transform:translateX(-338px)}
+    #cflag{transform:translateX(-372px)}
     #ahu{transform:scaleX(.8)}
     #m1{translate:-20px 0}
     #m2{translate:-45px 0}
@@ -140,7 +140,7 @@
 
 <div class="content">
   <h1>Until we see each <br>other again</h1>
-  <div class="sub">Chile &nbsp;·&nbsp; China</div>
+  <div class="sub">Te amo, baobao</div>
   <div class="timer" role="timer" aria-live="off">
     <div class="box"><div class="num" id="d">--</div><div class="lab">Days</div></div>
     <div class="box"><div class="num" id="h">--</div><div class="lab">Hours</div></div>
@@ -424,7 +424,7 @@
   var scene = document.getElementById("scene"), route = document.getElementById("route"),
       mq = window.matchMedia("(max-aspect-ratio: 1/1)");
   function fit(){
-    scene.setAttribute("viewBox", mq.matches ? "0 -260 780 900" : "0 0 1600 600");
+    scene.setAttribute("viewBox", mq.matches ? "0 -230 780 870" : "0 0 1600 600");
     scene.setAttribute("preserveAspectRatio", mq.matches ? "xMidYMax meet" : "xMidYMax slice");
     route.setAttribute("d", mq.matches ? "M 60 225 Q 390 -300 720 225" : "M 330 330 Q 800 40 1270 330");
   }
