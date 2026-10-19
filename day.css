@@ -1,0 +1,102 @@
+/* ---------- Day view (scene + itinerary panel) ---------- */
+#dayview{
+  position:fixed;inset:0;z-index:20;overflow:hidden;background:#07082a;color:var(--ink);
+  opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;
+}
+#dayview.open{opacity:1;visibility:visible}
+#dvscene{position:absolute;inset:0;width:100%;height:100%}
+#dvfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.dv-btn{
+  position:absolute;top:calc(env(safe-area-inset-top) + 12px);z-index:3;
+  font:inherit;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);
+  background:rgba(10,12,40,.5);border:1px solid rgba(255,210,122,.45);border-radius:999px;
+  padding:.5rem 1rem;cursor:pointer;backdrop-filter:blur(6px);
+}
+.dv-btn:hover{background:rgba(255,210,122,.22)}
+#dvBack{left:14px}
+#dvSound{right:14px}
+.dv-panel{
+  position:absolute;z-index:2;left:clamp(14px,3vw,44px);top:calc(env(safe-area-inset-top) + 64px);bottom:clamp(14px,4vh,40px);
+  width:min(430px,36vw);display:flex;flex-direction:column;
+  background:rgba(10,12,40,.58);border:1px solid rgba(255,210,122,.4);border-radius:22px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 14px 50px rgba(0,0,0,.45);
+  padding:1.4rem 1.4rem 1rem;
+}
+.dv-head .dv-day{display:block;font-size:.8rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold)}
+.dv-head h2{font-weight:400;font-style:italic;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.1;margin:.3rem 0 .2rem;text-shadow:0 2px 20px rgba(255,200,120,.4)}
+.dv-head .dv-date{font-family:"Segoe UI",system-ui,sans-serif;font-size:.85rem;opacity:.75;letter-spacing:.05em}
+.dv-list{scrollbar-width:thin;scrollbar-color:rgba(255,210,122,.4) transparent;list-style:none;margin:1.1rem 0 .6rem;padding:0 .2rem 0 0;overflow:auto;flex:1;position:relative}
+.dv-list::before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--gold),rgba(255,210,122,.08))}
+.dv-list li{
+  position:relative;padding:0 0 1.05rem 1.6rem;
+  opacity:0;transform:translateY(12px);animation:dvin .6s ease-out forwards;animation-delay:calc(var(--i) * .12s + .25s);
+}
+.dv-list li::before{
+  content:"";position:absolute;left:0;top:.35rem;width:12px;height:12px;border-radius:50%;
+  background:var(--gold);box-shadow:0 0 12px var(--gold);
+}
+.dv-list .t{display:block;font-family:"Segoe UI",system-ui,sans-serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.dv-list .x{display:block;margin-top:.15rem;font-size:1.05rem;line-height:1.35}
+@keyframes dvin{to{opacity:1;transform:none}}
+.dv-nav{display:flex;justify-content:space-between;gap:.5rem;padding-top:.6rem;border-top:1px solid rgba(255,210,122,.2)}
+.dv-nav button{
+  font:inherit;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+  background:none;border:1px solid rgba(255,210,122,.35);border-radius:999px;padding:.45rem .9rem;cursor:pointer;
+}
+.dv-nav button:hover:not(:disabled){background:rgba(255,210,122,.2)}
+.dv-nav button:disabled{visibility:hidden}
+@media (max-width:760px){
+  #dvscene{height:54%;bottom:auto}
+  #dvfx{height:54%;bottom:auto}
+  #dayview{background:#0b0826}
+  .dv-panel{left:10px;right:10px;width:auto;top:auto;bottom:10px;height:calc(46% - 20px);padding:1rem 1.1rem .7rem;border-radius:18px}
+  .dv-head h2{font-size:1.6rem}
+  .dv-list{margin-top:.7rem}
+  .dv-list .x{font-size:.98rem}
+}
+
+/* ---------- Scene animation classes ---------- */
+#dvscene .laser{transform-box:view-box;transform-origin:0 0;animation:sweep 6s ease-in-out infinite alternate}
+@keyframes sweep{from{transform:rotate(-38deg)}to{transform:rotate(38deg)}}
+#dvscene .spin{transform-box:view-box;animation:spin 16s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#dvscene .eq{transform-box:fill-box;transform-origin:50% 100%;animation:eq .6s ease-in-out infinite alternate}
+@keyframes eq{from{transform:scaleY(.2)}to{transform:scaleY(1)}}
+#dvscene .tile{animation:tile 2s ease-in-out infinite alternate;opacity:.1}
+@keyframes tile{from{opacity:.05}to{opacity:.7}}
+#dvscene .hop{transform-box:fill-box;animation:hop .55s ease-in-out infinite alternate}
+@keyframes hop{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+#dvscene .shift{animation:shiftx 1.4s linear infinite}
+@keyframes shiftx{to{transform:translateX(14px)}}
+#dvscene .neon{animation:neon 3s linear infinite}
+@keyframes neon{0%,18%,22%,62%,64%,100%{opacity:1}20%,63%{opacity:.35}}
+#dvscene .armwave{transform-box:view-box;transform-origin:868px 560px;animation:armwave .7s ease-in-out infinite alternate}
+@keyframes armwave{from{transform:rotate(-14deg)}to{transform:rotate(12deg)}}
+#dvscene .fadein{opacity:0;animation:fadein 28s ease-in-out infinite alternate}
+@keyframes fadein{0%,12%{opacity:0}100%{opacity:1}}
+#dvscene .fadein-soft{animation:glowsoft 3s ease-in-out infinite alternate}
+@keyframes glowsoft{from{opacity:.1}to{opacity:.4}}
+#dvscene .sink{animation:sink 36s ease-in-out infinite alternate}
+@keyframes sink{from{transform:translateY(-30px)}to{transform:translateY(130px)}}
+#dvscene .rise2{animation:rise2 40s ease-in-out infinite alternate}
+@keyframes rise2{from{transform:translateY(120px)}to{transform:translateY(-20px)}}
+#dvscene .swing{transform-box:fill-box;transform-origin:50% 0;animation:swing 3.2s ease-in-out infinite alternate}
+@keyframes swing{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+#dvscene .sway2{transform-box:fill-box;transform-origin:50% 0;animation:sway2 4.5s ease-in-out infinite alternate}
+@keyframes sway2{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+#dvscene .bulb{animation:bulb 2.4s ease-in-out infinite alternate}
+@keyframes bulb{from{opacity:.55}to{opacity:1}}
+#dvscene .rise{animation:balloon 20s linear infinite;opacity:0}
+@keyframes balloon{0%{transform:translateY(0);opacity:0}10%{opacity:.95}85%{opacity:.9}100%{transform:translateY(-860px);opacity:0}}
+#dvscene .ripple{transform-box:fill-box;transform-origin:center;animation:ripple 4s ease-out infinite;opacity:0}
+@keyframes ripple{0%{transform:scale(.3);opacity:.9}100%{transform:scale(2.2);opacity:0}}
+#dvscene .ping{transform-box:fill-box;transform-origin:center;animation:ping 2.2s ease-out infinite}
+@keyframes ping{0%{transform:scale(.6);opacity:1}100%{transform:scale(3);opacity:0}}
+#dvscene .smoke{animation:smoke 6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes smoke{0%{transform:translateY(0) scaleY(.6);opacity:0}30%{opacity:.4}100%{transform:translateY(-40px) scaleY(1);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  #dvscene *{animation:none!important}
+  #dvscene .fadein{opacity:.5}
+  #dvscene .tile{opacity:.4}
+}
