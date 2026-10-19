@@ -134,10 +134,63 @@
     .num{font-size:2rem}
     #scene{height:50vh}
   }
+
+  /* ---------- Shanghai page ---------- */
+  .sh-btn{
+    position:fixed;top:calc(env(safe-area-inset-top) + 12px);right:14px;z-index:5;
+    font:inherit;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink);background:rgba(10,12,40,.5);border:1px solid rgba(255,210,122,.55);
+    border-radius:999px;padding:.55rem 1.1rem;cursor:pointer;backdrop-filter:blur(6px);
+    transition:background .2s,transform .2s;
+  }
+  .sh-btn:hover{background:rgba(255,210,122,.25);transform:translateY(-1px)}
+  #shanghai{
+    position:fixed;inset:0;z-index:10;overflow:hidden;background:#07082a;
+    opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;
+  }
+  #shanghai.open{opacity:1;visibility:visible}
+  #shbg{position:absolute;inset:0;width:100%;height:100%}
+  .sh-back{
+    position:absolute;top:calc(env(safe-area-inset-top) + 12px);left:14px;z-index:2;
+    font:inherit;font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink);background:rgba(10,12,40,.5);border:1px solid rgba(255,210,122,.45);
+    border-radius:999px;padding:.5rem 1rem;cursor:pointer;backdrop-filter:blur(6px);
+  }
+  .sh-title{
+    position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top) + 9vh);z-index:2;text-align:center;
+    font-weight:400;font-style:italic;font-size:clamp(2rem,7vw,4.2rem);
+    text-shadow:0 2px 28px rgba(255,120,170,.6);pointer-events:none;
+  }
+  .sh-title small{display:block;margin-top:.4rem;font-style:normal;font-size:clamp(.7rem,1.6vw,1rem);letter-spacing:.4em;color:var(--gold)}
+  .days{
+    position:absolute;left:50%;bottom:clamp(18px,6vh,60px);transform:translateX(-50%);z-index:2;
+    display:grid;grid-template-columns:repeat(6,auto);gap:clamp(.5rem,1.4vw,1rem);
+    width:max-content;max-width:94vw;
+  }
+  .day{
+    font:inherit;font-size:clamp(.8rem,1.5vw,1.05rem);letter-spacing:.12em;
+    color:var(--ink);background:rgba(10,12,40,.55);border:1px solid rgba(255,210,122,.5);
+    border-radius:16px;padding:.9rem clamp(.8rem,2vw,1.6rem);cursor:pointer;backdrop-filter:blur(8px);
+    box-shadow:0 8px 26px rgba(0,0,0,.4);transition:background .2s,transform .2s,box-shadow .2s;
+  }
+  .day:hover,.day:focus-visible{background:rgba(255,122,168,.35);transform:translateY(-3px);box-shadow:0 12px 30px rgba(255,90,150,.35);outline:none}
+  @media (max-width:640px){
+    .days{grid-template-columns:repeat(3,1fr);width:88vw}
+    .day{padding:1rem .4rem}
+  }
+  .boat{animation:boat 40s linear infinite}
+  @keyframes boat{from{transform:translateX(-300px)}to{transform:translateX(1900px)}}
+  .shimmer{animation:shimmer 3s ease-in-out infinite}
+  @keyframes shimmer{0%,100%{opacity:.15;transform:scaleX(.8)}50%{opacity:.7;transform:scaleX(1.1)}}
+  .fw{animation:fw 5s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+  @keyframes fw{0%{transform:scale(.1);opacity:0}8%{opacity:1}60%{opacity:.8}100%{transform:scale(1.4);opacity:0}}
+  .beam{animation:beam 6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+  @keyframes beam{0%,100%{opacity:.25;transform:rotate(-8deg)}50%{opacity:.6;transform:rotate(8deg)}}
 </style>
 </head>
 <body>
 <svg id="stars" aria-hidden="true"></svg>
+<button class="sh-btn" id="shBtn" type="button">Shanghai</button>
 
 <div class="content">
   <h1>Until we see each <br>other again</h1>
@@ -404,6 +457,102 @@
   <rect id="extra" x="-60" y="596" width="1100" height="120" fill="#1d1a3f"/>
   </svg>
 
+<div id="shanghai" role="dialog" aria-label="Shanghai" aria-hidden="true">
+  <svg id="shbg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="shsky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#05061f"/><stop offset=".55" stop-color="#2b1b66"/><stop offset=".85" stop-color="#b0457f"/><stop offset="1" stop-color="#f08a5d"/>
+      </linearGradient>
+      <linearGradient id="shfar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3a86"/><stop offset="1" stop-color="#2a2060"/></linearGradient>
+      <linearGradient id="shnear" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#251a58"/><stop offset="1" stop-color="#0f0a30"/></linearGradient>
+      <linearGradient id="shriver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2f7a"/><stop offset="1" stop-color="#0c0a2e"/></linearGradient>
+      <linearGradient id="shbeam" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffd2ee" stop-opacity=".8"/><stop offset="1" stop-color="#ffd2ee" stop-opacity="0"/></linearGradient>
+      <radialGradient id="shmoon"><stop offset="0" stop-color="#fff6d8"/><stop offset="1" stop-color="#ffe3a0"/></radialGradient>
+      <radialGradient id="shmoonglow"><stop offset="0" stop-color="#ffe3a0" stop-opacity=".5"/><stop offset="1" stop-color="#ffe3a0" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1600" height="900" fill="url(#shsky)"/>
+    <g id="shstars"></g>
+    <circle cx="1330" cy="190" r="150" fill="url(#shmoonglow)"/>
+    <circle cx="1330" cy="190" r="46" fill="url(#shmoon)"/>
+    <g class="drift" opacity=".3" fill="#ffc7d8"><ellipse cx="0" cy="260" rx="140" ry="18"/><ellipse cx="60" cy="246" rx="80" ry="14"/></g>
+    <g class="drift" style="animation-duration:100s;animation-delay:-50s" opacity=".22" fill="#ffc7d8"><ellipse cx="0" cy="360" rx="170" ry="20"/><ellipse cx="70" cy="344" rx="90" ry="15"/></g>
+
+    <!-- fireworks -->
+    <g class="fw" style="animation-delay:0s" transform="translate(420,300)"><g stroke="#ffd27a" stroke-width="3" stroke-linecap="round"><path d="M0 -50V-30M0 50V30M-50 0H-30M50 0H30M35 -35L21 -21M-35 35L-21 21M35 35L21 21M-35 -35L-21 -21"/></g></g>
+    <g class="fw" style="animation-delay:-2s" transform="translate(1000,250)"><g stroke="#ff7aa8" stroke-width="3" stroke-linecap="round"><path d="M0 -60V-36M0 60V36M-60 0H-36M60 0H36M42 -42L25 -25M-42 42L-25 25M42 42L25 25M-42 -42L-25 -25"/></g></g>
+    <g class="fw" style="animation-delay:-3.6s" transform="translate(700,200)"><g stroke="#9ad7ff" stroke-width="3" stroke-linecap="round"><path d="M0 -44V-26M0 44V26M-44 0H-26M44 0H26M31 -31L18 -18M-31 31L-18 18M31 31L18 18M-31 -31L-18 -18"/></g></g>
+
+    <!-- far skyline -->
+    <g fill="url(#shfar)" opacity=".85">
+      <rect x="0" y="560" width="70" height="200"/><rect x="80" y="520" width="50" height="240"/><rect x="140" y="580" width="80" height="180"/>
+      <rect x="250" y="540" width="44" height="220"/><rect x="560" y="570" width="60" height="190"/><rect x="640" y="530" width="48" height="230"/>
+      <rect x="1180" y="550" width="56" height="210"/><rect x="1260" y="520" width="46" height="240"/><rect x="1400" y="560" width="70" height="200"/>
+      <rect x="1490" y="500" width="50" height="260"/><rect x="1550" y="570" width="60" height="190"/>
+    </g>
+
+    <!-- Shanghai Tower -->
+    <path d="M470 770 L486 420 Q505 300 520 190 Q535 300 554 420 L570 770Z" fill="#4a3a86"/>
+    <path d="M520 190 V140" stroke="#cfc7ee" stroke-width="4"/>
+    <path d="M488 400 Q520 370 552 400 M484 500 Q520 470 556 500 M480 610 Q520 580 560 610" stroke="#ffd27a" stroke-width="2" fill="none" opacity=".7"/>
+    <!-- Jin Mao -->
+    <g fill="#3a2a6a">
+      <polygon points="620,770 630,300 650,300 660,770"/>
+      <rect x="626" y="360" width="28" height="6" fill="#ffd27a" opacity=".6"/><rect x="626" y="430" width="28" height="6" fill="#ffd27a" opacity=".6"/>
+      <rect x="638" y="240" width="4" height="60"/>
+    </g>
+    <!-- Shanghai World Financial Center -->
+    <path d="M700 770 L706 330 L772 330 L778 770Z" fill="#3a2a6a"/>
+    <ellipse cx="739" cy="345" rx="14" ry="12" fill="#0d0a2e"/>
+    <path d="M706 330 L772 330" stroke="#ffd27a" stroke-width="2" opacity=".6"/>
+    <!-- Oriental Pearl Tower -->
+    <polygon points="990,770 1006,430 1014,430 1030,770" fill="#3a2a6a"/>
+    <polygon points="972,770 998,500 1004,500 988,770" fill="#2c2159"/>
+    <polygon points="1032,770 1016,500 1022,500 1048,770" fill="#2c2159"/>
+    <rect x="1007" y="330" width="6" height="140" fill="#3a2a6a"/>
+    <circle cx="1010" cy="560" r="26" fill="#ff7aa8"/>
+    <circle cx="1010" cy="400" r="40" fill="#ff7aa8"/>
+    <circle cx="1000" cy="390" r="12" fill="#ffc4d8" opacity=".7"/>
+    <circle cx="1010" cy="320" r="17" fill="#ff7aa8"/>
+    <rect x="1008" y="220" width="4" height="100" fill="#cfc7ee"/>
+    <circle class="twinkle" cx="1010" cy="220" r="5" fill="#ff4d4d"/>
+    <!-- near buildings -->
+    <g fill="url(#shnear)">
+      <rect x="320" y="560" width="64" height="210"/><rect x="396" y="520" width="50" height="250"/>
+      <rect x="820" y="580" width="70" height="190"/><rect x="900" y="540" width="52" height="230"/>
+      <rect x="1090" y="570" width="60" height="200"/><rect x="1160" y="610" width="80" height="160"/>
+      <rect x="1290" y="540" width="56" height="230"/><rect x="1360" y="590" width="70" height="180"/>
+      <rect x="0" y="600" width="90" height="170"/><rect x="100" y="570" width="60" height="200"/><rect x="190" y="620" width="100" height="150"/>
+    </g>
+    <g id="shwin"></g>
+
+    <!-- searchlight beams -->
+    <polygon class="beam" points="1296,560 1306,560 1346,60 1256,60" fill="url(#shbeam)" style="animation-delay:-1s"/>
+    <polygon class="beam" points="420,540 430,540 470,40 380,40" fill="url(#shbeam)" style="animation-delay:-3s"/>
+
+    <!-- river -->
+    <rect x="0" y="770" width="1600" height="130" fill="url(#shriver)"/>
+    <g id="shrefl"></g>
+    <g class="boat" style="animation-duration:50s">
+      <g transform="translate(0,812)"><path d="M0 0 L120 0 L106 14 L14 14Z" fill="#150f35"/><rect x="30" y="-16" width="46" height="16" fill="#2c2159"/><rect x="38" y="-12" width="8" height="6" fill="#ffd27a"/><rect x="54" y="-12" width="8" height="6" fill="#ffd27a"/><circle class="twinkle" cx="96" cy="-4" r="3" fill="#ff4d4d"/></g>
+    </g>
+    <g class="boat" style="animation-duration:70s;animation-delay:-30s">
+      <g transform="translate(0,850) scale(1.4)"><path d="M0 0 L120 0 L106 14 L14 14Z" fill="#0f0a30"/><rect x="20" y="-20" width="60" height="20" fill="#251a58"/><rect x="28" y="-14" width="8" height="7" fill="#ff7aa8"/><rect x="44" y="-14" width="8" height="7" fill="#ffd27a"/><rect x="60" y="-14" width="8" height="7" fill="#9ad7ff"/></g>
+    </g>
+    <path d="M0 880 Q400 862 800 872 T1600 868 L1600 900 L0 900Z" fill="#0b0826"/>
+  </svg>
+
+  <button class="sh-back" id="shBack" type="button">&larr; Back</button>
+  <div class="sh-title">Shanghai<small>上海</small></div>
+  <nav class="days" aria-label="Days">
+    <button class="day" type="button" data-day="1">Day 1</button>
+    <button class="day" type="button" data-day="2">Day 2</button>
+    <button class="day" type="button" data-day="3">Day 3</button>
+    <button class="day" type="button" data-day="4">Day 4</button>
+    <button class="day" type="button" data-day="5">Day 5</button>
+    <button class="day" type="button" data-day="6">Day 6</button>
+  </nav>
+</div>
+
 <script>
 (function(){
   // Target: Jan 22, 2027 4:25 PM China (UTC+8) = 08:25:00 UTC = 5:25 AM Chile (UTC-3)
@@ -431,6 +580,45 @@
   }
   fit();
   if (mq.addEventListener) mq.addEventListener("change", fit); else mq.addListener(fit);
+
+  // Shanghai overlay
+  var sh2 = document.getElementById("shanghai"), shNS = "http://www.w3.org/2000/svg";
+  function mk(tag, attrs, parent){
+    var e = document.createElementNS(shNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  }
+  var gs = document.getElementById("shstars");
+  for (var a = 0; a < 110; a++){
+    var st = mk("circle", {cx:(Math.random()*1600).toFixed(0), cy:(Math.random()*420).toFixed(0), r:(Math.random()*1.4+.4).toFixed(2), fill:"#fff", "class":"star"}, gs);
+    st.style.animationDelay = (-Math.random()*3).toFixed(2) + "s";
+  }
+  var gw = document.getElementById("shwin");
+  [[320,560,64,210],[396,520,50,250],[820,580,70,190],[900,540,52,230],[1090,570,60,200],[1160,610,80,160],
+   [1290,540,56,230],[1360,590,70,180],[0,600,90,170],[100,570,60,200],[190,620,100,150],
+   [480,420,80,340],[626,320,28,440],[708,380,62,380]].forEach(function(b){
+    for (var n = 0; n < b[2]*b[3]/700; n++){
+      var w = mk("rect", {x:(b[0]+6+Math.random()*(b[2]-16)).toFixed(0), y:(b[1]+8+Math.random()*(b[3]-24)).toFixed(0), width:4, height:6,
+        fill: Math.random() < .2 ? "#ff9ec0" : "#ffd27a", "class":"twinkle"}, gw);
+      w.style.animationDelay = (-Math.random()*3).toFixed(2) + "s";
+      w.style.animationDuration = (2 + Math.random()*5).toFixed(1) + "s";
+    }
+  });
+  var gr = document.getElementById("shrefl");
+  for (var r = 0; r < 28; r++){
+    var rf = mk("rect", {x:(Math.random()*1560).toFixed(0), y:(780 + Math.random()*85).toFixed(0), width:(20+Math.random()*60).toFixed(0), height:3, rx:1.5,
+      fill:["#ffd27a","#ff7aa8","#9ad7ff"][r % 3], "class":"shimmer"}, gr);
+    rf.style.animationDelay = (-Math.random()*3).toFixed(2) + "s";
+    rf.style.transformBox = "fill-box"; rf.style.transformOrigin = "center";
+  }
+  function setShanghai(open){
+    sh2.classList.toggle("open", open);
+    sh2.setAttribute("aria-hidden", open ? "false" : "true");
+    document.getElementById(open ? "shBack" : "shBtn").focus();
+  }
+  document.getElementById("shBtn").addEventListener("click", function(){ setShanghai(true); });
+  document.getElementById("shBack").addEventListener("click", function(){ setShanghai(false); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && sh2.classList.contains("open")) setShanghai(false); });
 
   // shooting star
   var sh = document.createElementNS("http://www.w3.org/2000/svg", "line");
