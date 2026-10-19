@@ -100,9 +100,21 @@
   });
 
   // ---- panel + scene ----
+  // Wide windows: show the whole scene (letterbox sideways, extending the sky/ground); otherwise anchor to the bottom.
+  function fit(){
+    var r = scene.getBoundingClientRect(), wide = r.width / r.height > 1.78;
+    scene.setAttribute("preserveAspectRatio", wide ? "xMidYMax meet" : "xMidYMax slice");
+  }
+  function extend(){
+    scene.querySelectorAll("rect").forEach(function(el){
+      if (Number(el.getAttribute("width")) >= 1600 && !Number(el.getAttribute("x"))){ el.setAttribute("x", -3000); el.setAttribute("width", 7600); }
+    });
+  }
+  window.addEventListener("resize", fit);
   function render(){
     var d = data[current], prev = data[current - 1], next = data[current + 1];
     scene.innerHTML = scenes[d.theme] ? scenes[d.theme]() : "";
+    extend(); fit();
     panel.innerHTML =
       '<div class="dv-head"><span class="dv-day">Day ' + d.day + '</span><h2>' + d.title + '</h2><span class="dv-date">' + d.date + '</span></div>' +
       '<ol class="dv-list">' + d.items.map(function(it, i){
